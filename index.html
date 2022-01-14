@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Wheather App</title>
+    <style>
+        #data{
+            margin: 50px;
+            /* margin-top: 500px; */
+        }
+        #masai{
+            display: flex;
+            flex-direction: row;
+            /* gap: 150px; */
+            /* flex-wrap: 1; */
+            text-align: center;
+        }
+        #data{
+            /* border: 1px solid red; */
+            /* width: 40%; */
+            min-width: 300px;
+            padding-top: 40px;
+            padding-left: 60px;
+            /* box-shadow: ; */
+        }
+
+        #map{
+            /* border: 1px solid black; */
+            /* width: 500px;
+            height: 200px; */
+            margin-top: 90px;
+        }
+        .app{
+            text-align: center;
+            /* color: chartreuse; */
+        }
+        #forcast-id{
+            margin-top: 20px;
+            /* width: 100px; */
+            /* color: red; */
+        
+        }
+    </style>
+</head>
+<body>
+    <div class="app"><h1>MINI Weather App</h1></div>
+  <div class="app">  City: <input type="text" id="city">
+    <button onclick="getWeather()" >Search</button>
+    <br>
+    <br>
+    <button class="app" onclick="forcastgo()">Forcast</button>
+    <!-- <button onclick="displaymap()">map</button> -->
+
+</div>
+
+   
+ 
+<div id="masai">
+    <div id="data"></div>
+    <div id="map"></div>
+   
+</div>
+</body>
+</html>
+
+<script>
+// let url = api.openweathermap.org/data/2.5/weather?q={city name}&appid=0dad319e4801ecd7ee66221394fc32fd
+// var key = "0dad319e4801ecd7ee66221394fc32fd";
+
+let data_div = document.getElementById("data")
+let map_div = document.getElementById("map")
+
+
+
+
+async function getWeather(){
+    try {
+
+
+        let city = document.getElementById("city").value;
+
+    let response = await fetch(
+        `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=0dad319e4801ecd7ee66221394fc32fd&units=metric`);
+
+
+let data = await response.json();
+console.log(data)
+showWeather(data)
+displaymap()
+
+    } 
+    catch(err){
+        console.log(err)
+    }
+}
+
+
+function showWeather(weather){
+    data_div.innerText="";
+    let temp = document.createElement("p")
+
+     temp.innerText = `temp - ${weather.main.temp}`
+
+     let pressure = document.createElement("p");
+     pressure.innerText = ` pressure ${weather.main.pressure}`
+
+     let humidity = document.createElement("p");
+     humidity.innerText = `humidity ${weather.main.humidity}`
+
+     let mintemp = document.createElement("p");
+
+     mintemp.innerText = `min-temp- ${weather.main.temp_min}`
+
+     let maxtemp = document.createElement("p");
+
+     maxtemp.innerText = `max-temp- ${weather.main.temp_max}`
+
+     let sunset = document.createElement("p");
+     sunset.innerText=`sunset- ${weather.sys.sunset}`
+
+
+     let sunrise = document.createElement("p");
+     sunrise.innerText=`sunrise- ${weather.sys.sunrise}`
+
+     let windspeed = document.createElement("p");
+     windspeed.innerText=`WindSpeed- ${weather.wind.speed}`
+
+
+     data_div.append(temp,mintemp,maxtemp,pressure,humidity,windspeed,sunrise,sunset);
+
+}
+
+// async function getmap(){
+
+  
+
+//     let res = await fetch(
+//         "https://maps.google.com/maps?q=${city}&t=&z=13&ie=UTF8&iwloc=&output=embed")
+
+//         let mapdata = await res.json();
+//         // getmap(mapdata)
+//         console.log(mapdata)
+ 
+    
+// }
+
+function displaymap(map){
+
+    let city_map = document.getElementById("city").value;
+    let x = document.getElementById("map");
+
+ x.innerHTML= `<iframe
+          width="500"
+          height="400"
+          id="gmap_canvas"
+          src="https://maps.google.com/maps?q=${city_map}&t=&z=13&ie=UTF8&iwloc=&output=embed"
+          frameborder="0"
+          scrolling="no"
+          marginheight="0"
+          marginwidth="0"
+        ></iframe
+        >
+ `
+ map_div.append(x)
+}
+
+function forcastgo(){
+    window.location.href="question2.html"
+}
+
+</script>
